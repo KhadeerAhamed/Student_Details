@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details Lookup</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg,#6dd5ed,#3380A3,#001F3F);
+            color: #F5F5F5;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            margin-top: 20px;
+        }
+        .college-logo {
+            width: 100px;
+            height: 100px;
+        }
+        .container {
+            margin-top: 30px;
+            background: #3380A3;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        .form-control {
+            border-radius: 20px;
+        }
+        .btn {
+            border-radius: 20px;
+        }
+        .student-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <!-- College Header -->
+    <div class="header">
+        <img src="SKU logo.png" alt="College Logo" class="college-logo"> <!-- Replace with actual logo -->
+        <h1>Sri Krishnadevaraya University College of Engineering and Technology</h1>  <!-- Replace with actual college name -->
+    </div>
+
+    <div class="container">
+        <h2>III CSE Details</h2>
+        <input type="text" id="rollNumber" class="form-control mt-3" placeholder="Enter Roll Number">
+        <button class="btn btn-primary mt-3" onclick="fetchStudentDetails()">Get Details</button>
+        <div id="studentDetails" class="mt-4"></div>
+    </div>
+
+    <script>
+        // Student Data (Replace with actual 72 students)
+        const students = {
+            "101": {
+                "name": "C.AKASH",
+                "course": "B.Tech CSE",
+                "fatherName": " C.NARASIMHA MURTHY",
+                "address": " 4-6-32, sreekantapuram, Hindupur, Sri Satya Sai(dt), 515201",
+                "phone": "9618738967 ",
+                "bloodGroup": " A+",
+                "aadhaar": "6038973620",
+                "email": "",
+                "photo": "2210101.jpg"  // Replace with actual photo file
+            },
+            "102": {
+                "name": "A.DIVYA ",
+                "course": "B.Tech CSE",
+                "fatherName": "ALLE PRASAD",
+                "address": "H.No:1-14, Maddulacheruvu(V), kanaganapalli (M), sri Sathya Sai (D)",
+                "phone": " 9391121202",
+                "bloodGroup": "O+",
+                "aadhaar": " 850068010175",
+                "email": "",
+                "photo": "2210102.jpg"  // Replace with actual photo file
+            },
+            "103": {
+                "name": "A.MADHU SREE",
+                "course": "B.Tech CSE",
+                "fatherName": "A.MRUTHENJAYA",
+                "address": "D.No:1/76, Gangavaram village, BC colony, Ananatapur",
+                "phone": "  9398211439",
+                "bloodGroup": "B+",
+                "aadhaar": "  414134429146",
+                "email": "",
+                "photo": "2210103.jpg"  // Replace with actual photo file
+            },
+            "104": {
+                "name": "A.PAVAN SAI TEJA",
+                "course": "B.Tech CSE",
+                "fatherName": " A.SURESH",
+                "address": " H.No:1-3/1, Adaram(village), KVB puram (mandal), Tirupathi",
+                "phone": " 9381392434",
+                "bloodGroup": "O+",
+                "aadhaar": "561082475838",
+                "email": "",
+                "photo": "2210104.jpg"  // Replace with actual photo filE
+            },
+            "105": {
+                "name": "A.VAMSI",
+                "course": "B.Tech CSE",
+                "fatherName": "A.VAMSI",
+                "address": " H.No:3/52, Thurakapalli(v), Duttalur(m), Nellore (d)",
+                "phone": " 8639039434",
+                "bloodGroup": "B+",
+                "aadhaar": "6300 4894 8352",
+                "email": "",
+                "photo": "2210105.jpg"  // Replace with actual photo file
+            },
+            "106": {
+                "name": "A.ANNAMANI",
+                "course": "B.Tech CSE",
+                "fatherName": "A.SUDHAKAR",
+                "address":  "3-115, Thimmandoddi(v), C Belagal(m), Kurnool(d)",
+                "phone": "9381638958",
+                "bloodGroup": "A+",
+                "aadhaar": "839292674629",
+                "email": "",
+                "photo": "2210106.jpg"  // Replace with actual photo file
+            },
+            "107": {
+                "name": "A.VAMSHI",
+                "course": "B.Tech CSE",
+                "fatherName": "A.POTHULAIAH",
+                "address": " 7/105, KURUBA STREET GOOTY (VILLAGE) GOOTY (MANDAL) ANATAPUR(D) PINAKINI",
+                "phone": "6300010406",
+                "bloodGroup": "B+",
+                "aadhaar": " 518891198044 ",
+                "email": "",
+                "photo": "2210107.jpg"  // Replace with actual photo file
+            },
+            "108": {
+                "name": "B.NANDHINI",
+                "course": "B.Tech CSE",
+                "fatherName": " B.CHAKRAVARTHI",
+                "address": " 3-147-11 Indiramma colony, Simhadripuram, Kadapa(d)",
+                "phone": "7569361461",
+                "bloodGroup": "O+",
+                "aadhaar": "",
+                "email": " 200970399568",
+                "photo": "2210108.jpg"  // Replace with actual photo file
+            },
+            "109": {
+                "name": "B.VIDYA SREE",
+                "course": "B.Tech CSE",
+                "fatherName": "B.ANAND KUMAR",
+                "address": "H.No:12/156, Gubanapalli(v), kalyanadurgam (m), Anantapur (d) ",
+                "phone": "6302144305",
+                "bloodGroup": "AB+",
+                "aadhaar": "546416007521",
+                "email": "",
+                "photo": "2210109.jpg"  // Replace with actual photo file
+            },
+            "110": {
+                "name": "B.CHITTI",
+                "course": "B.Tech CSE",
+                "fatherName": "B. SAMSON",
+                "address": "H.No:8/67, Kambadur(v)&(m), Anathapur(D)",
+                "phone": "9398265100",
+                "bloodGroup": "O+",
+                "aadhaar": "775300278379",
+                "email": "",
+                "photo": "2210110.jpg"  // Replace with actual photo file
+            },
+            "111": {
+                "name": "B.VEERENDRA",
+                "course": "B.Tech CSE",
+                "fatherName": "B.VANNURAPPA",
+                "address": "H.No:2/73, Karivemula(V), Devanakonda(M), Kurnool(Dt)C",
+                "phone": "6302983868",
+                "bloodGroup": "AB+",
+                "aadhaar": "746660421374",
+                "email": "",
+                "photo": "2210111.jpg"  // Replace with actual photo file
+            },
+            "112": {
+                "name": "B.SANDYA",
+                "course": "B.Tech CSE",
+                "fatherName": " B.SUBBARAYUDU",
+                "address": " D.2/79, k.N palyam(v), kanaganapalli (m), Sri Satya Sai (D) ",
+                "phone": "7815963528",
+                "bloodGroup": "O+",
+                "aadhaar": "9518 9746 8977",
+                "email": "",
+                "photo": "2210112.jpg"  // Replace with actual photo file
+            },
+            "113": {
+                "name": "C.BHAVYA SRI",
+                "course": "B.Tech CSE",
+                "fatherName": "C NARASIMHA MURTHY",
+                "address": "H.No:13/10/16, boyapeta(s), hindhupur (m), 515201, Sathya Sai (d) ",
+                "phone": "6305948655",
+                "bloodGroup": "B+",
+                "aadhaar": "948169430195",
+                "email": "",
+                "photo": "2210113.jpg"  // Replace with actual photo file
+            },
+            "114": {
+                "name": "D.SRUTHI",
+                "course": "B.Tech CSE",
+                "fatherName": "D.ESWARAYYA",
+                "address": "D.No: 1/1576, Pamidi, Teachers colony, Anantapur district",
+                "phone": "7396275924",
+                "bloodGroup": "B+",
+                "aadhaar": "410726512422",
+                "email": "",
+                "photo": "2210114.jpg"  // Replace with actual photo file
+            },
+            "115": {
+                "name": "D.MADHU SHEKHAR",
+                "course": "B.Tech CSE",
+                "fatherName": "D.CHINNARANGASWAMY",
+                "address": "H.No:3- bc kalany, Ondutla(v), , Gadivemula(m), Nandhyala(D). ",
+                "phone": "8074120126",
+                "bloodGroup": "B+",
+                "aadhaar": "815293558180",
+                "email": "",
+                "photo": "2210115.jpg"  // Replace with actual photo file
+            },
+            "116": {
+                "name": "D.BUMBLE BEE",
+                "course": "B.Tech CSE",
+                "fatherName": "D.MOHAMMAD RAFI",
+                "address": "1-679, asr nagar, thapovanam, Anantapur",
+                "phone": "9652890664",
+                "bloodGroup": "A+",
+                "aadhaar": "427368326122",
+                "email": "",
+                "photo": "2210116.jpg"  // Replace with actual photo file
+           },
+            "117": {
+                "name": "D.GOWTHAMI BAI",
+                "course": "B.Tech CSE",
+                "fatherName": "D.BALAJI NAIK",
+                "address": "D.no:1/8, Dorigilla thanda, Mudigubba mandal, Sri Satya Sai dist ",
+                "phone": "7569446089",
+                "bloodGroup":"A+",
+                "aadhaar": "373009073237",
+                "email": "",
+                "photo": "2210117.jpg"  // Replace with actual photo file
+            },
+            "118": {
+                "name": "E.ARCHANA",
+                "course": "B.Tech CSE",
+                "fatherName": "E.BHEEMUDU",
+                "address": "4-183 Guvvaladoddi (v), parlapalli (p), yemmiganur (m), kurnool (d) ",
+                "phone": "7569871408",
+                "bloodGroup": "A+",
+                "aadhaar": "453296618067",
+                "email": "",
+                "photo": "2210118.jpg"  // Replace with actual photo file
+             },
+            "119": {
+                "name": "E.LATHA SRI ",
+                "course": "B.Tech CSE",
+                "fatherName": "E.HANUMANTHAPPA",
+                "address": "H.No:2-199-B, mavaturu(v), penukonda (m), sri satya sai district",
+                "phone": "6302589954 ",
+                "bloodGroup": "B+",
+                "aadhaar": "367664983683",
+                "email": "",
+                "photo": "2210119.jpg"  // Replace with actual photo file
+            },
+            "120": {
+                "name": "G.SREENIVASULU",
+                "course": "B.Tech CSE",
+                "fatherName": " G. VENKATESWARLU",
+                "address": "2/52 Sankirenipalle (v), pagidyala(m), Nandyal(dt)",
+                "phone": "8688067039",
+                "bloodGroup": "A+",
+                "aadhaar": "883040193808",
+                "email": "",
+                "photo": "2210120.jpg"  // Replace with actual photo file
+            },
+            "121": {
+                "name": "G.SUBHAHAN",
+                "course": "B.Tech CSE",
+                "fatherName": "G.GOUSE MODDEEN",
+                "address": "H.No:2/33/02, Bukkapatanam, Sri Sathya Sai dist",
+                "phone": "6305898796",
+                "bloodGroup": "B+",
+                "aadhaar": " 430837796501",
+                "email": "",
+                "photo": "2210121.jpg"  // Replace with actual photo file
+            },
+            "123": {
+                "name": "I.AYYAPPA REDDY",
+                "course": "B.Tech CSE",
+                "fatherName": "I.CHINNA KONDA REDDY",
+                "address": "1/167, chinnasinganapalli, duvvur(M), kadapa(Dist) ",
+                "phone": "6300445499",
+                "bloodGroup": "B+",
+                "aadhaar": "867381934209",
+                "email": "",
+                "photo": "2210123.jpg"  // Replace with actual photo file
+            },
+            "124": {
+                "name": "J.SIDDENDRA",
+                "course": "B.Tech CSE",
+                "fatherName": "J.PEERAIAH",
+                "address": "H.No:3/190, akkalareddypalli(v), Kadapa(D)",
+                "phone": "7989188825",
+                "bloodGroup": "A+",
+                "aadhaar": "251037269112",
+                "email": "",
+                "photo": "2210124.jpg"  // Replace with actual photo file
+            },
+            "125": {
+                "name": "J.VAISHNAVI",
+                "course": "B.Tech CSE",
+                "fatherName": "J. SUDHAKAR",
+                "address": ": H.No:B-12-426/3, Buchi reddy palem(m), Nellore(D)",
+                "phone": "991219550",
+                "bloodGroup": "O+",
+                "aadhaar": "494488652641",
+                "email": "",
+                "photo": "2210125.jpg"  // Replace with actual photo file
+            },
+            "126": {
+                "name": "K.H.SUDHEER",
+                "course": "B.Tech CSE",
+                "fatherName": " H N HANUMANTHARAYAPPA",
+                "address": " H.No:5/56A, Rekulakunta(V), Madakasira(M), Sri SathyaSai(Dt) ",
+                "phone": "995955176",
+                "bloodGroup": "A+",
+                "aadhaar": "599812513448",
+                "email": "",
+                "photo": "2210126.jpg"  // Replace with actual photo file
+            },
+            "127": {
+                "name": "K.RAMESH ",
+                "course": "B.Tech CSE",
+                "fatherName": " K.MAILARAPPA",
+                "address": " H.No:5-2-111A, Sreekantapuram, Hindupur(M), Sri Sathya Sai (D)",
+                "phone": "8309117723",
+                "bloodGroup": "O+",
+                "aadhaar": " 677024506516",
+                "email": "",
+                "photo": "2210127.jpg"  // Replace with actual photo file
+            },
+            "128": {
+                "name": "K.SANDHYA",
+                "course": "B.Tech CSE",
+                "fatherName": "K.KALAKANDESWARUDU",
+                "address": "H.No:1-8A, Beerepalli, hindupur(m), Satya Sai(dist)",
+                "phone": "7989095004 ",
+                "bloodGroup": "A+",
+                "aadhaar": "964563832813",
+                "email": "",
+                "photo": "2210128.jpg"  // Replace with actual photo file
+            },
+            "129": {
+                "name": "K.SANTHOSH KUMAR",
+                "course": "B.Tech CSE",
+                "fatherName": " K KRISTAPPA",
+                "address": "H.No:1-126-9, kodigenahalli (v), parigi(m), Sri Sathya Sai (D)",
+                "phone": "7794883357",
+                "bloodGroup": "A+",
+                "aadhaar": "2051 1548 8237",
+                "email": "",
+                "photo": "2210129.jpg"  // Replace with actual photo file
+            },
+            "130": {
+                "name": "K.KALYAN",
+                "course": "B.Tech CSE",
+                "fatherName": "K. VENKATA RAMANA",
+                "address": "H.No:4/42, kammavaripalle(v), porumamilla(m), Kadapa(dt)",
+                "phone": "9032906967",
+                "bloodGroup": "O+",
+                "aadhaar": "549707402978",
+                "email": "",
+                "photo": " 2210130.jpg"  // Replace with actual photo file
+            },
+            "131": {
+                "name": "KAVYASREE ",
+                "course": "B.Tech CSE",
+                "fatherName": "K. MANJUNATH",
+                "address": " H.No:1-2-257, Rayadurgam, Anantapur(dist).",
+                "phone": "6281630449",
+                "bloodGroup": "A-",
+                "aadhaar": "334299436773",
+                "email": "",
+                "photo": "2210131.jpg"  // Replace with actual photo file
+            },
+            "132": {
+                "name": "K.DHARANI",
+                "course": "B.Tech CSE",
+                "fatherName": "K.GANGADHAR REDDY",
+                "address": "7/253, Nandamuri Nagar, Kakkalapalli colonyAnantapur",
+                "phone": "8309469745",
+                "bloodGroup": "B+",
+                "aadhaar": "651838539551",
+                "email": "",
+                "photo": "2210132.jpg"  // Replace with actual photo file
+            },
+            "133": {
+                "name": "K.KEERTHI",
+                "course": "B.Tech CSE",
+                "fatherName": "K.CHANDRAKALA",
+                "address": "H.No:9/90, Peramvandlapalli(v), Amadagur(m), Srisathya sai(d)",
+                "phone": "8147934005",
+                "bloodGroup": "A+",
+                "aadhaar": "241637871568",
+                "email": "",
+                "photo": "2210133.jpg"  // Replace with actual photo file
+            },
+            "134": {
+                "name": "K.SUDHARSHAN REDDY",
+                "course": "B.Tech CSE",
+                "fatherName": "K.RAMA SUBBA REDDY",
+                "address": "3/1046-b, Gannevaripalli colony, Tadipatri , Annathapuramu",
+                "phone": "7569765550",
+                "bloodGroup": "B-",
+                "aadhaar": "818574504476",
+                "email": "",
+                "photo": "2210134.jpg"  // Replace with actual photo file
+            },
+            "135": {
+                "name": "K.URMILA",
+                "course": "B.Tech CSE",
+                "fatherName": "K. VENKATA RAMI REDDY",
+                "address": "H.No:8/72, Gopurajupalli (V) , Putlur (M) , Ananthapur (D) .",
+                "phone": "7569826624",
+                "bloodGroup": "B+",
+                "aadhaar": "784743465211",
+                "email": "",
+                "photo": "2210135.jpg"  // Replace with actual photo file
+            },
+            "136": {
+                "name": "K.NARASIMH",
+                "course": "B.Tech CSE",
+                "fatherName": "K.SREENIVASULU",
+                "address": " 2/70 , Chalakur(v), Somandepalli (m), Sri Satya Sai(d)",
+                "phone": "6304659760",
+                "bloodGroup": "B+",
+                "aadhaar": "770220231485",
+                "email": "",
+                "photo": "2210136.jpg"  // Replace with actual photo file
+            },
+            "137": {
+                "name": "M.BHASKAR",
+                "course": "B.Tech CSE",
+                "fatherName": " M.ANJINNAPPA",
+                "address": " 1/114Gonimaklapalli(v), Roddam(m) Sri Satya sai(D",
+                "phone": "9398965155",
+                "bloodGroup": "A+",
+                "aadhaar": "640343250025",
+                "email": "",
+                "photo": "2210137.jpg"  // Replace with actual photo file  
+            },
+            "138": {
+                "name": "M.SHANKAR",
+                "course": "B.Tech CSE",
+                "fatherName": "M.GOVARDHAN",
+                "address": "5/147, sc colony, kadivella(v), yemmiganur(m), kurnool(D)",
+                "phone": "8019687362",
+                "bloodGroup": "O+",
+                "aadhaar": "563971271845",
+                "email": "",
+                "photo": "2210138.jpg"  // Replace with actual photo file
+            },
+            "139": {
+                "name": "M.YATHINDRA NAIDU",
+                "course": "B.Tech CSE",
+                "fatherName": "M.NARASIMHULU",
+                "address": "8/50 , Kota street , peravali (vi), Maddikera East(M) , kurnool.",
+                "phone": "9951433545",
+                "bloodGroup": "B+",
+                "aadhaar": "968240127702",
+                "email": "",
+                "photo": "2210139.jpg"  // Replace with actual photo file  
+            },
+            "140": {
+                "name": "M.SANTHAN",
+                "course": "B.Tech CSE",
+                "fatherName": "M.GANGADHAR",
+                "address": "14-25, Gangannagari palli, Madanapalle, Annamayya dist",
+                "phone": "7337294028",
+                "bloodGroup": "O+",
+                "aadhaar": "236703716662",
+                "email": "",
+                "photo": "2210140.jpg"  // Replace with actual photo file
+            },
+            "141": {
+                "name": "M.SAI PREETHI",
+                "course": "B.Tech CSE",
+                "fatherName": "M.MASTHANAPPA",
+                "address": " H.No:1/247, Chinnamusturu (v), Uravakonda(m),Anantapur (d) ",
+                "phone": "8977235115",
+                "bloodGroup": "O+",
+                "aadhaar": "7490 9595 9084",
+                "email": "",
+                "photo": "2210141.jpg"  // Replace with actual photo file
+            },
+            "142": {
+                "name": "M.RANI",
+                "course": "B.Tech CSE",
+                "fatherName": "M.KAMBAIAH",
+                "address": "H.No:3/69, Tadipathri(M) , Anantapur(d)",
+                "phone": "6303987247",
+                "bloodGroup": "O+",
+                "aadhaar": "228375467739",
+                "email": "",
+                "photo": "2210142.jpg"  // Replace with actual photo file
+            },
+            "143": {
+                "name": "N.SIVA NARENDRA ",
+                "course": "B.Tech CSE",
+                "fatherName": "N SIVA SHANKARAIAH",
+                "address": ": H.No:4-5, Dudyala (v), kothapalli(m), Nandyal (D)",
+                "phone": "6309759480",
+                "bloodGroup": "O+",
+                "aadhaar": "225264466567",
+                "email": "",
+                "photo": "2210143.jpg"  // Replace with actual photo file
+            },
+            "144": {
+                "name": "N.MALLIKARJUNA",
+                "course": "B.Tech CSE",
+                "fatherName": "N.MAHESWAR REDDY",
+                "address": "2-12, Venkatareddypalli(v), Tadipatri(m), Anantapur(D)",
+                "phone": "7989814937",
+                "bloodGroup": "O-",
+                "aadhaar": "945804576317",
+                "email": "",
+                "photo": "2210144.jpg"  // Replace with actual photo file
+            },
+            "145": {
+                "name": "N.RAHITHA ",
+                "course": "B.Tech CSE",
+                "fatherName": "N.RAJU",
+                "address": "H.No:2/223, Arekal(v), Adoni(m), Kurnool (D)",
+                "phone": "7396049774",
+                "bloodGroup": "O+",
+                "aadhaar": "608681257403",
+                "email": "",
+                "photo": "2210145.jpg"  // Replace with actual photo file
+            },
+            "146": {
+                "name": "P.BHAGYA LAKSHMI",
+                "course": "B.Tech CSE",
+                "fatherName": "P. ESWARAMMA(mother)",
+                "address": "H.No:1/144, Bidurukontham (village) , Kanekal (Mandal) Anantapur(Dist)",
+                "phone": "9703121300",
+                "bloodGroup": "B+",
+                "aadhaar": "578688906241",
+                "email": "",
+                "photo": "2210146.jpg"  // Replace with actual photo file
+            },
+            "147": {
+                "name": "P.SINDHU",
+                "course": "B.Tech CSE",
+                "fatherName": "P.RAJASHEKHAR REDDY",
+                "address": " 5-66, cherlopalli(v), puttaparthi(m), sri Satya Sai(D",
+                "phone": "6304475435",
+                "bloodGroup": "O+",
+                "aadhaar": "529742780261",
+                "email": "",
+                "photo": "2210147.jpg"  // Replace with actual photo file
+            },
+            "148": {
+                "name": "P.GOWTHAMI",
+                "course": "B.Tech CSE",
+                "fatherName": "P.UMESH",
+                "address": " H.No:1/87, Kolaganahalli (v), Bommanahal (m), Anantapur (D)",
+                "phone": "8341624101",
+                "bloodGroup": "A-",
+                "aadhaar": "541999005166",
+                "email": "",
+                "photo": "2210148.jpg"  // Replace with actual photo file
+            },
+            "149": {
+                "name": "R.VENKATA SIVA",
+                "course": "B.Tech CSE",
+                "fatherName": "R. NAGESHWARIAH",
+                "address": "D.NO-4/84H, Mangalapalli(V), Veerabbali(M), kadapa(D) ",
+                "phone": "9177700360",
+                "bloodGroup": "A+",
+                "aadhaar": "220790065314",
+                "email": "",
+                "photo": "2210149.jpg"  // Replace with actual photo file  
+            },
+            "150": {
+                "name": "S.ABHILASH",
+                "course": "B.Tech CSE",
+                "fatherName": "S.GURAIAH ",
+                "address": "H.No:17/222, chithananda nagar, porumamilla, kadapa",
+                "phone": "8074997240",
+                "bloodGroup": "O+",
+                "aadhaar": "247110781434",
+                "email": "",
+                "photo": "2210150.jpg"  // Replace with actual photo file
+            },
+            "151": {
+                "name": "S.ERNEST RAJ VARDHAN",
+                "course": "B.Tech CSE",
+                "fatherName": "S.RAMARAO",
+                "address": "7-34, B.C.colony, Atmakuru(M), Ananthapur(D)",
+                "phone": "7416349921",
+                "bloodGroup": "B+",
+                "aadhaar": "6250 4044 1082",
+                "email": "",
+                "photo": "2210151.jpg"  // Replace with actual photo file
+            },
+            "152": {
+                "name": "S.SNEHA DEEPIKA",
+                "course": "B.Tech CSE",
+                "fatherName": "S.MADHUSUDHAN REDDY",
+                "address": "4-3-288, shanthinager , yerraguntla , Kadapa district",
+                "phone": "8309166580",
+                "bloodGroup": "O+",
+                "aadhaar": " 6265 3294 8333",
+                "email": "",
+                "photo": "2210152.jpg"  // Replace with actual photo file
+            },
+            "153": {
+                "name": "S.AFSANA",
+                "course": "B.Tech CSE",
+                "fatherName": "S.MAHABOOB BASHA",
+                "address": "H.No:15/340, Peddamandyam (m), , Chittoor (D)-517297",
+                "phone": "9492746316",
+                "bloodGroup": "B+",
+                "aadhaar": "820137801921",
+                "email": "",
+                "photo": "2210153.jpg"  // Replace with actual photo file
+            },
+            "154": {
+                "name": "S.MOHAMMAD ROSHAN",
+                "course": "B.Tech CSE",
+                "fatherName": "S. KHASIM PEERA",
+                "address": "H.No:28/3/389, Netaji Nagar, ananthapur",
+                "phone": "9390837437",
+                "bloodGroup": "O+",
+                "aadhaar": " 2903 8977 1640",
+                "email": "",
+                "photo": "2210154.jpg"  // Replace with actual photo file
+            },
+            "155": {
+                "name": "S.UMA MAHANTI",
+                "course": "B.Tech CSE",
+                "fatherName": "S.RAMANJANEYAREDD",
+                "address": "H.No:4-53, Bayanapalli, Kamalapuram, Kadapa district",
+                "phone": "9347945983",
+                "bloodGroup": "O+",
+                "aadhaar": "339390338518",
+                "email": "",
+                "photo": "2210155.jpg"  // Replace with actual photo file
+            },
+            "156": {
+                "name": "S.GURU PRAKASH NAIK",
+                "course": "B.Tech CSE",
+                "fatherName": " S.BALU NAIK",
+                "address": "9-769 Satyasai nagar Pothukunta, Dharmavaram (m), Sri Satya Sai(d) ",
+                "phone": "7386588308",
+                "bloodGroup": "AB+",
+                "aadhaar": "5135 9520 7246",
+                "email": "",
+                "photo": "2210156.jpg"  // Replace with actual photo file
+            },
+            "157": {
+                "name": "S.RAJU NAIK",
+                "course": "B.Tech CSE",
+                "fatherName": "S.SWAMI NAIK",
+                "address": "4-47 Isranaik thanda (v), Owk(m) , Nandyal (dt)",
+                "phone": "8688544909",
+                "bloodGroup": "B+",
+                "aadhaar": "855524805934",
+                "email": "",
+                "photo": "2210157.jpg"  // Replace with actual photo file
+            },
+            "158": {
+                "name": "S.KHADEER AHAMED",
+                "course": "B.Tech CSE",
+                "fatherName": "S.NAZEER AHAMED",
+                "address": "19/87, Bade sab street, Dharmavaram, Sri Sathya Sai (D)",
+                "phone": "9550546719",
+                "bloodGroup": "O+",
+                "aadhaar": "813060307616",
+                "email": "",
+                "photo": "2210158.jpg"  // Replace with actual photo file
+            },
+            "159": {
+                "name": "U.DIVYA",
+                "course": "B.Tech CSE",
+                "fatherName": " U.VENKATA PRASAD",
+                "address": " 3-143 pyalakurthy (v)kodumur (m)kurnool (d",
+                "phone": "8977578575",
+                "bloodGroup": "A+",
+                "aadhaar": "395283168567",
+                "email": "",
+                "photo": "2210159.jpg"  // Replace with actual photo file
+            },
+            "160": {
+                "name": "V.SATHISH KUMAR",
+                "course": "B.Tech CSE",
+                "fatherName": "V.NARAYANASWAMY",
+                "address": "H.No:1-43, Rotarypuram (v), Bukkarayasamudram (m), Anantapur (D) ",
+                "phone": "9110781335",
+                "bloodGroup": "B+",
+                "aadhaar": "681831991979",
+                "email": "",
+                "photo": "2210160.jpg"  // Replace with actual photo file
+            },
+            "161": {
+                "name": "V.SAI KRISHNA ",
+                "course": "B.Tech CSE",
+                "fatherName": " V.NAGASESHANNA ",
+                "address": "4-282, kotha banakacherla (v), pamulapadu (m), nandyal(D)",
+                "phone": "7396460416",
+                "bloodGroup": "A+",
+                "aadhaar": "390384409936",
+                "email": "",
+                "photo": "2210161.jpg"  // Replace with actual photo file
+            },
+            "162": {
+                "name": "Y.LAKSHMANNA",
+                "course": "B.Tech CSE",
+                "fatherName": "Y. MALLESH",
+                "address": "H.No:1-144, ternekal (V), Devanakonda (M), kurnool (Dt)",
+                "phone": "9391271906",
+                "bloodGroup": "B+",
+                "aadhaar": "915896201137",
+                "email": "",
+                "photo": "2210162.jpg"  // Replace with actual photo file
+            },
+            "171": {
+                "name": "B.T. VENKATESH",
+                "course": "B.Tech CSE",
+                "fatherName": "B.T. VENKATESH",
+                "address": "H.No:1-108/2, Daivamdinne(v), yemmiganur(m), kurnool(d) ",
+                "phone": "7981353573",
+                "bloodGroup": "A+",
+                "aadhaar": "446236483499",
+                "email": "",
+                "photo": "2210171.jpg"  // Replace with actual photo file
+            },
+            "172": {
+                "name": "C.RAVI KUMAR ",
+                "course": "B.Tech CSE",
+                "fatherName": "C.RAMARAJU",
+                "address": "H.No:1-50, MUSALAREDDYPALLI(V), KALASAPADU(M), KADAPA(D) ",
+                "phone": "8008952984",
+                "bloodGroup": "B+",
+                "aadhaar": "909525245647",
+                "email": "",
+                "photo": "2210172.jpg"  // Replace with actual photo file
+            },
+            "173": {
+                "name": "K.AKSHAYA",
+                "course": "B.Tech CSE",
+                "fatherName": "K.YESANNA",
+                "address": "DNO: 1-10-292, pulivendula, christian colony, Kadapa district",
+                "phone": "9491041200",
+                "bloodGroup": "O+",
+                "aadhaar": "3819 7827 7785",
+                "email": "",
+                "photo": "2210173.jpg"  // Replace with actual photo file
+            },
+            "174": {
+                "name": "K.SPOORTHI ",
+                "course": "B.Tech CSE",
+                "fatherName": "K.JAGADEESWARA REDDY",
+                "address": "2-53, Lingala(v) (m), kadapa(d)",
+                "phone": "8317609225",
+                "bloodGroup": "A+",
+                "aadhaar": "4833 5357 186",
+                "email": "",
+                "photo": "2210174.jpg"  // Replace with actual photo file
+            },
+            "175": {
+                "name": "N.VAMSI",
+                "course": "B.Tech CSE",
+                "fatherName": "N.CHINNA OBULESU",
+                "address": "5/18, sc colony, akumalla(v), sanjamala(m), nandyal(d)",
+                "phone": "8639974914",
+                "bloodGroup": "O+",
+                "aadhaar": "363721659800",
+                "email": "",
+                "photo": "2210175.jpg"  // Replace with actual photo file
+            },
+            "176": {
+                "name": "O.THRINETHRA",
+                "course": "B.Tech CSE",
+                "fatherName": "O.MANEIAH",
+                "address": "H.No:2/420, , obanapalli(v), Rly koduru(M), annammayya (Dist) ",
+                "phone": "9121099209",
+                "bloodGroup": "A+",
+                "aadhaar": "342683297186",
+                "email": "",
+                "photo": "2210176.jpg"  // Replace with actual photo file
+            },
+            "177": {
+                "name": "R.CHINMAYI",
+                "course": "B.Tech CSE",
+                "fatherName": "R.SIVASANKAR",
+                "address": "3/264, 3rd road, New Town, Anantapur",
+                "phone": "9014564558",
+                "bloodGroup": "O+",
+                "aadhaar": " 361424097643",
+                "email": "",
+                "photo": "2210177.jpg"  // Replace with actual photo file  
+            },
+            "178": {
+                "name": "S.GOUSHIYA",
+                "course": "B.Tech CSE",
+                "fatherName": "S.MD.FARUQ",
+                "address": " 28-574, Anantapur dist",
+                "phone": "9121534131",
+                "bloodGroup": "A+",
+                "aadhaar": "362369107546",
+                "email": "",
+                "photo": "2210178.jpg"  // Replace with actual photo file
+            },
+            "179": {
+                "name": "S.ANJUM",
+                "course": "B.Tech CSE",
+                "fatherName": "S.KHADAR VALI",
+                "address": "H.No:6/931-A-2, chatrapathi sivaji nagar , rajampet (M), annamayya (D) ",
+                "phone": "9347396652",
+                "bloodGroup": "B+",
+                "aadhaar": "580806418582",
+                "email": "",
+                "photo": "2210179.jpg"  // Replace with actual photo file
+            },
+            "180": {
+                "name": "T.CHINNA GANESH REDDY",
+                "course": "B.Tech CSE",
+                "fatherName": "T GOVINDA REDDY ",
+                "address": " 3-27, muthukur(v), vempalli (m), kadapa (dist)",
+                "phone": "9392241700",
+                "bloodGroup": "O+",
+                "aadhaar": "210485109936",
+                "email": "",
+                "photo": "2210180.jpg"  // Replace with actual photo file
+            },
+            "181": {
+                "name": "V.KAMAL BASHA",
+                "course": "B.Tech CSE",
+                "fatherName": "V.NAGOOR BASHA",
+                "address": "2/69 Vadlavandla palli, Ganganapalli (p), Pendlimarri(m), Kadapa(dist).",
+                "phone": "9550241816",
+                "bloodGroup": "O+",
+                "aadhaar": "827674439815",
+                "email": "",
+                "photo": "2210181.jpg"  // Replace with actual photo file
+            }
+
+            
+        };
+
+        function fetchStudentDetails() {
+            let roll = document.getElementById("rollNumber").value.trim();
+            let detailsDiv = document.getElementById("studentDetails");
+
+            if (students[roll]) {
+                detailsDiv.innerHTML = `
+                    <div class="row align-items-center text-start bg-light text-dark p-3 rounded">
+                        <div class="col-md-4 text-center">
+                            <img src="${students[roll].photo}" alt="Student Photo" class="student-photo">
+                        </div>
+                        <div class="col-md-8">
+                            <h4><strong>Name:</strong> ${students[roll].name}</h4>
+                            <p><strong>Course:</strong> ${students[roll].course}</p>
+                            <p><strong>Roll Number:</strong> ${roll}</p>
+                            <p><strong>Father's Name:</strong> ${students[roll].fatherName}</p>
+                            <p><strong>Address:</strong> ${students[roll].address}</p>
+                            <p><strong>Phone:</strong> ${students[roll].phone}</p>
+                            <p><strong>Blood Group:</strong> ${students[roll].bloodGroup}</p>
+                            <p><strong>Aadhaar Number:</strong> ${students[roll].aadhaar}</p>
+                            <p><strong>Email ID:</strong> ${students[roll].email}</p>
+                        </div>
+                    </div>`;
+            } else {
+                detailsDiv.innerHTML = `<div class="alert alert-danger">No student found with Roll Number ${roll}.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
